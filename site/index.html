@@ -1,186 +1,62 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <title>Stage300 AI Vulnerability Evidence Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { margin:0; font-family: system-ui, sans-serif; background:#07111f; color:#e5e7eb; }
-    .wrap { max-width:1200px; margin:auto; padding:36px 20px; }
-    .hero,.card { background:#0f172a; border:1px solid #334155; border-radius:20px; padding:24px; margin-bottom:18px; }
-    .badge { display:inline-block; background:#2563eb; padding:7px 12px; border-radius:999px; font-weight:700; }
-    h1 { font-size:42px; margin:16px 0 8px; }
-    h2 { margin-top:0; }
-    .muted { color:#94a3b8; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
-    .box { background:#020617; border:1px solid #334155; border-radius:14px; padding:16px; }
-    .big { font-size:34px; font-weight:900; }
-    .accept { color:#22c55e; }
-    .pending { color:#facc15; }
-    .reject { color:#ef4444; }
-    pre, textarea, input, select {
-      background:#020617; color:#dbeafe; border:1px solid #334155;
-      border-radius:12px; padding:12px; width:100%; box-sizing:border-box;
-    }
-    textarea { min-height:160px; }
-    button {
-      background:#2563eb; color:white; border:0; border-radius:10px;
-      padding:10px 14px; font-weight:700; margin:4px 4px 4px 0;
-    }
-    .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .hash { word-break:break-all; font-family:monospace; color:#bfdbfe; }
-    table { width:100%; border-collapse:collapse; }
-    th,td { border-bottom:1px solid #334155; padding:10px; text-align:left; }
-    th { color:#93c5fd; }
-    @media(max-width:800px){ .row{grid-template-columns:1fr;} h1{font-size:32px;} }
-  </style>
+<meta charset="utf-8">
+<title>Stage300 AI Evidence Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { background:#07111f; color:#e5e7eb; font-family:system-ui; margin:0; padding:40px;}
+.card { background:#0f172a; border:1px solid #334155; border-radius:16px; padding:20px; margin-bottom:16px;}
+h1 { font-size:36px; margin-bottom:10px;}
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;}
+.box { background:#020617; border:1px solid #334155; border-radius:12px; padding:14px;}
+.big { font-size:28px; font-weight:900;}
+.accept { color:#22c55e;}
+pre { background:#020617; padding:14px; border-radius:10px;}
+</style>
 </head>
 <body>
-<div class="wrap">
 
-  <section class="hero">
-    <span class="badge">QSP / VEP / Stage300</span>
-    <h1>AI Vulnerability Evidence Dashboard</h1>
-    <p class="muted">
-      Stage300は、AI脆弱性記録を「検証可能な証拠」に変換し、
-      Stage299 Gateで accept / pending / reject を判定する公開ダッシュボードです。
-    </p>
-  </section>
-
-  <section class="grid">
-    <div class="box"><div class="muted">Page Stage</div><div class="big">300</div></div>
-    <div class="box"><div class="muted">Gate Engine</div><div class="big">Stage299</div></div>
-    <div class="box"><div class="muted">Report Package</div><div class="big accept">Enabled</div></div>
-    <div class="box"><div class="muted">Fail-Closed</div><div class="big accept">Enabled</div></div>
-  </section>
-
-  <section class="card">
-    <h2>接続情報</h2>
-    <div class="grid">
-      <div class="box"><div class="muted">Verification URL</div><div>https://mokkunsuzuki-code.github.io/stage300/</div></div>
-      <div class="box"><div class="muted">Manifest</div><div>examples/stage300_accept_manifest.json</div></div>
-      <div class="box"><div class="muted">Gate Result</div><div>results/stage300_gate_result.json</div></div>
-    </div>
-    <p class="muted">動作: Stage300 はAI脆弱性記録を証拠化し、Gate判定とレポート化まで見せます。</p>
-  </section>
-
-  <section class="card">
-    <h2>ダッシュボード</h2>
-    <div class="grid">
-      <div class="box"><div class="muted">総件数</div><div class="big">5</div></div>
-      <div class="box"><div class="muted">accept率</div><div class="big accept">60%</div></div>
-      <div class="box"><div class="muted">pending率</div><div class="big pending">20%</div></div>
-      <div class="box"><div class="muted">reject率</div><div class="big reject">20%</div></div>
-      <div class="box"><div class="muted">平均 Trust Score</div><div class="big">0.720</div></div>
-    </div>
-  </section>
-
-  <section class="row">
-    <div class="card">
-      <h2>Decision集計</h2>
-      <pre>accept: 3
-pending: 1
-reject: 1</pre>
-    </div>
-    <div class="card">
-      <h2>Trust Score分布</h2>
-      <pre>0.0-0.2: 1
-0.2-0.4: 0
-0.4-0.6: 1
-0.6-0.8: 0
-0.8-1.0: 3</pre>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>検証フォーム</h2>
-    <label>URL</label>
-    <input value="https://mokkunsuzuki-code.github.io/stage300/">
-    <label>manifest JSON</label>
-    <textarea>{
-  "subject": "Stage300 AI vulnerability verification demo",
-  "stage": 300,
-  "evidence_type": "ai-vulnerability-url",
-  "verification_url": "https://mokkunsuzuki-code.github.io/stage300/",
-  "content_sha256": "7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4",
-  "signature_valid": true
-}</textarea>
-    <button>Stage299 Gateで検証</button>
-    <button>サンプル入力</button>
-  </section>
-
-  <section class="card">
-    <h2>検索・フィルタ</h2>
-    <div class="grid">
-      <div><label>Decision</label><select><option>すべて</option><option>accept</option><option>pending</option><option>reject</option></select></div>
-      <div><label>URL 部分一致</label><input value="stage300"></div>
-      <div><label>最小 Trust Score</label><input value="0.600"></div>
-      <div><label>表示件数</label><input value="20"></div>
-    </div>
-    <button>検索実行</button>
-    <button>条件クリア</button>
-    <button>JSONエクスポート</button>
-    <button>CSVエクスポート</button>
-  </section>
-
-  <section class="card">
-    <h2>最新結果 / 詳細</h2>
-    <div class="big accept">ACCEPT</div>
-    <p>Trust Score: <strong>1.000</strong></p>
-    <p>Saved ID: <strong>5</strong></p>
-    <p>Fail-Closed: <strong>true</strong></p>
-    <p>Manifest SHA-256:</p>
-    <p class="hash">5d5077e3607434500210d46f423038442110a599cf3baa874bb1a4b43aa7b938</p>
-    <p>Verified At: <strong>2026-04-27T11:37:30+00:00</strong></p>
-    <p>Gate Source: <strong>stage299</strong></p>
-    <p>Gate Status: <strong>ok</strong></p>
-    <pre>input_url: URL format is acceptable.
-manifest_json: Manifest JSON parsed successfully.
-content_sha256: Evidence hash exists and is valid SHA-256.
-signature: signature_valid is true.
-gate_decision: Stage299 Gate returned accept.
-safety: No exploit instructions included.</pre>
-    <button>HTMLレポート</button>
-    <button>Report JSON</button>
-    <button>Report SHA256</button>
-    <button>レポートを保存</button>
-  </section>
-
-  <section class="card">
-    <h2>保存履歴 / 検索結果</h2>
-    <p class="muted">件数: 5 / decision=all / url_query=stage300 / min_score=0.600 / limit=20</p>
-    <table>
-      <thead>
-        <tr><th>Decision</th><th>Score</th><th>ID</th><th>URL</th><th>SHA-256</th><th>Gate</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="accept">ACCEPT</td><td>1.000</td><td>5</td><td>stage300</td><td class="hash">5d5077e3...</td><td>stage299 / ok</td></tr>
-        <tr><td class="pending">PENDING</td><td>0.600</td><td>4</td><td>unsigned-demo</td><td class="hash">4a1ebf31...</td><td>stage299 / pending</td></tr>
-        <tr><td class="reject">REJECT</td><td>0.000</td><td>3</td><td>broken-demo</td><td class="hash">7c310cc0...</td><td>stage299 / reject</td></tr>
-        <tr><td class="accept">ACCEPT</td><td>1.000</td><td>2</td><td>safe-demo</td><td class="hash">123009cd...</td><td>stage299 / ok</td></tr>
-        <tr><td class="accept">ACCEPT</td><td>1.000</td><td>1</td><td>stage300</td><td class="hash">7f22d4a1...</td><td>stage299 / ok</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="card">
-    <h2>Stage300の価値</h2>
-    <div class="grid">
-      <div class="box"><h3>AI脆弱性報告</h3><p>スクショではなく、検証可能な証拠URLとして提出可能。</p></div>
-      <div class="box"><h3>企業監査</h3><p>AI出力ログを改ざん検知可能な形で保存。</p></div>
-      <div class="box"><h3>規制対応</h3><p>AI出力のトレーサビリティと説明責任に対応。</p></div>
-      <div class="box"><h3>収益化</h3><p>証拠化API、監査レポート、脆弱性検証SaaSへ展開可能。</p></div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Safety Notice</h2>
-    <p class="muted">
-      このページは安全な公開デモです。実際の攻撃コード、悪用可能な手順、
-      実在サービスへの攻撃方法は含みません。
-    </p>
-  </section>
-
+<div class="card">
+<h1>AI Vulnerability Evidence</h1>
+<div class="big accept">ACCEPT</div>
+<p>このAI脆弱性記録は証拠として検証されています。</p>
 </div>
+
+<div class="card">
+<h2>Trust Score Breakdown（企業向け）</h2>
+<div class="grid">
+<div class="box"><b>Integrity</b><div class="big">1.00</div><p>改ざんなし</p></div>
+<div class="box"><b>Origin</b><div class="big">0.80</div><p>署名部分（将来強化）</p></div>
+<div class="box"><b>Safety</b><div class="big">1.00</div><p>危険コードなし</p></div>
+<div class="box"><b>Reproducibility</b><div class="big">1.00</div><p>再検証可能</p></div>
+<div class="box"><b>Completeness</b><div class="big">0.90</div><p>証拠項目ほぼ完備</p></div>
+<div class="box"><b>Audit Ready</b><div class="big">0.90</div><p>監査提出可能レベル</p></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Final Trust Score</h2>
+<div class="big">0.94</div>
+</div>
+
+<div class="card">
+<h2>Gate Result JSON</h2>
+<pre>{
+  "decision": "accept",
+  "trust_score": 1.0,
+  "verification_ok": true
+}</pre>
+</div>
+
+<div class="card">
+<h2>Business Value</h2>
+<ul>
+<li>AI監査対応</li>
+<li>脆弱性報告の証拠化</li>
+<li>規制・コンプライアンス対応</li>
+</ul>
+</div>
+
 </body>
 </html>
