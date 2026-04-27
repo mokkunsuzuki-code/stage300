@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/qsp_product_contract_v1.schema.json",
+  "title": "QSP Product Contract v1",
+  "type": "object",
+  "required": [
+    "stage",
+    "spec_version",
+    "generated_at",
+    "input_layer",
+    "decision_layer",
+    "enforcement_layer",
+    "exposure_layer"
+  ],
+  "properties": {
+    "stage": {
+      "type": "string"
+    },
+    "spec_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "input_layer": {
+      "type": "object",
+      "required": ["session_id", "subject", "policy", "evidence"],
+      "properties": {
+        "session_id": { "type": "string" },
+        "subject": { "type": "string" },
+        "policy": {
+          "type": "object",
+          "required": ["policy_id", "fail_closed_required"]
+        },
+        "evidence": {
+          "type": "object",
+          "required": ["integrity", "execution", "identity", "time"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "decision_layer": {
+      "type": "object",
+      "required": ["decision", "reason", "scores", "verified_claims"],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": ["accept", "pending", "reject"]
+        },
+        "reason": { "type": "string" },
+        "scores": { "type": "object" },
+        "verified_claims": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "enforcement_layer": {
+      "type": "object",
+      "required": ["fail_closed", "execution_state", "allowed_outputs"],
+      "properties": {
+        "fail_closed": { "type": "boolean" },
+        "execution_state": {
+          "type": "string",
+          "enum": ["halted_safe", "restricted", "released"]
+        },
+        "allowed_outputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "exposure_layer": {
+      "type": "object",
+      "required": ["public_status", "exposure_artifacts", "contract_sha256"],
+      "properties": {
+        "public_status": {
+          "type": "string",
+          "enum": ["accept", "pending", "reject"]
+        },
+        "exposure_artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "contract_sha256": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

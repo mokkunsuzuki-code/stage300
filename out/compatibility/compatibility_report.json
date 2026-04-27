@@ -1,0 +1,39 @@
+{
+  "checked_contract": "out/product/qsp_product_contract.json",
+  "checks": [
+    {
+      "detail": "contract spec_version=1.0.0",
+      "id": "COMPAT-001",
+      "passed": true,
+      "title": "Known version required"
+    },
+    {
+      "detail": "checked required core layers",
+      "id": "COMPAT-002",
+      "passed": true,
+      "title": "Core layers must remain present"
+    },
+    {
+      "detail": "decision=accept",
+      "id": "COMPAT-003",
+      "passed": true,
+      "title": "Decision semantics must be stable"
+    },
+    {
+      "detail": "fail_closed=True",
+      "id": "COMPAT-004",
+      "passed": true,
+      "title": "Fail-closed semantics must be preserved"
+    },
+    {
+      "detail": "public_status=accept",
+      "id": "COMPAT-005",
+      "passed": true,
+      "title": "Public status must remain derivable"
+    }
+  ],
+  "contract_version": "1.0.0",
+  "is_compatible": true,
+  "policy_id": "qsp-contract-compatibility-v1",
+  "stage": "stage287"
+}

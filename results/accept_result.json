@@ -1,0 +1,10 @@
+{
+  "decision": "accept",
+  "fail_closed": true,
+  "manifest_sha256": "123009cd2ab9a254c2f899d985b9b74cc30099b6923cc239b93c8c0d98dc5527",
+  "reason": "Evidence is valid and signature is valid.",
+  "signature_valid": true,
+  "stage": 299,
+  "trust_score": 1.0,
+  "verification_ok": true
+}

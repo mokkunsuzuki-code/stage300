@@ -1,0 +1,7 @@
+{
+  "subject": "Broken AI vulnerability verification demo",
+  "evidence_type": "ai-vulnerability-url",
+  "verification_url": "",
+  "content_sha256": "not-a-valid-sha256",
+  "signature_valid": false
+}

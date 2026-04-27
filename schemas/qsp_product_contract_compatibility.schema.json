@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/qsp_product_contract_compatibility.schema.json",
+  "title": "QSP Product Contract Compatibility Report",
+  "type": "object",
+  "required": [
+    "stage",
+    "policy_id",
+    "checked_contract",
+    "contract_version",
+    "is_compatible",
+    "checks"
+  ],
+  "properties": {
+    "stage": {
+      "type": "string",
+      "const": "stage287"
+    },
+    "policy_id": {
+      "type": "string"
+    },
+    "checked_contract": {
+      "type": "string"
+    },
+    "contract_version": {
+      "type": "string"
+    },
+    "is_compatible": {
+      "type": "boolean"
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "passed"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "detail": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,41 @@
+{
+  "stage": "stage287",
+  "title": "QSP Product Contract Compatibility Policy",
+  "version": "1.0.0",
+  "policy_id": "qsp-contract-compatibility-v1",
+  "purpose": "Define backward-compatible verification rules for QSP product contracts.",
+  "supported_contract_versions": [
+    "1.0.0"
+  ],
+  "compatibility_rules": [
+    {
+      "id": "COMPAT-001",
+      "title": "Known version required",
+      "description": "A contract must declare a known spec_version."
+    },
+    {
+      "id": "COMPAT-002",
+      "title": "Core layers must remain present",
+      "description": "input_layer, decision_layer, enforcement_layer, and exposure_layer must exist across compatible versions."
+    },
+    {
+      "id": "COMPAT-003",
+      "title": "Decision semantics must be stable",
+      "description": "Decision values must remain within accept, pending, reject."
+    },
+    {
+      "id": "COMPAT-004",
+      "title": "Fail-closed semantics must be preserved",
+      "description": "Compatible versions must preserve explicit fail_closed meaning."
+    },
+    {
+      "id": "COMPAT-005",
+      "title": "Public status must remain derivable",
+      "description": "A compatible contract must still expose a public verification status."
+    }
+  ],
+  "future_version_policy": {
+    "minor_version": "May add fields without removing required core semantics.",
+    "major_version": "May change structure, but must ship a compatibility adapter or migration verifier."
+  }
+}

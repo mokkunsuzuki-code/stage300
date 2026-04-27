@@ -1,0 +1,10 @@
+{
+  "decision": "reject",
+  "fail_closed": true,
+  "manifest_sha256": "7c310cc07301bf19a865c6d0dbc8fef2aa54cf0b54a7689bbc477f313aff7435",
+  "reason": "Evidence is invalid. Fail-closed Gate rejected the input.",
+  "signature_valid": false,
+  "stage": 299,
+  "trust_score": 0.0,
+  "verification_ok": false
+}

@@ -1,0 +1,66 @@
+{
+  "decision_layer": {
+    "decision": "accept",
+    "reason": "QSP internal product contract is well-formed and all required trust dimensions are represented.",
+    "scores": {
+      "execution_trust": 1.0,
+      "identity_trust": 1.0,
+      "integrity_trust": 1.0,
+      "time_trust": 0.5,
+      "total_trust": 0.5
+    },
+    "verified_claims": [
+      "QSP decision is normalized before exposure",
+      "Fail-closed state is part of the product contract",
+      "VEP consumes a stable export contract"
+    ]
+  },
+  "enforcement_layer": {
+    "allowed_outputs": [
+      "normalized_contract",
+      "public_verification_artifacts",
+      "verification_page_inputs"
+    ],
+    "execution_state": "released",
+    "fail_closed": true
+  },
+  "exposure_layer": {
+    "contract_sha256": "73fcf41d74f3cef478854beadf4326a98c08dd3db2e2343c7e17c9128e1c7606",
+    "exposure_artifacts": [
+      "release_manifest.json",
+      "release_manifest.json.sha256",
+      "github_actions_receipt.json",
+      "public_verification_url"
+    ],
+    "public_status": "accept"
+  },
+  "generated_at": "2026-04-23T02:28:22.053395+00:00",
+  "input_layer": {
+    "evidence": {
+      "execution": {
+        "ci_reproducible": true,
+        "workflow_evidence_present": true
+      },
+      "identity": {
+        "issuer_bound": true,
+        "signature_present": true
+      },
+      "integrity": {
+        "manifest_bound": true,
+        "sha256_present": true
+      },
+      "time": {
+        "ots_present": true,
+        "settlement_status": "pending_or_complete"
+      }
+    },
+    "policy": {
+      "fail_closed_required": true,
+      "policy_id": "qsp-product-policy-v1"
+    },
+    "session_id": "qsp-session-stage286-demo",
+    "subject": "QSP internal product connection"
+  },
+  "spec_version": "1.0.0",
+  "stage": "stage286"
+}

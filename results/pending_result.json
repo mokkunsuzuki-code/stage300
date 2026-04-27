@@ -1,0 +1,10 @@
+{
+  "decision": "pending",
+  "fail_closed": true,
+  "manifest_sha256": "4a1ebf312011295a86c602d50c083e3e8259577ec8ddbb4b1331e57f971ae8d7",
+  "reason": "Evidence is valid, but signature is missing or not yet verified.",
+  "signature_valid": false,
+  "stage": 299,
+  "trust_score": 0.6,
+  "verification_ok": true
+}

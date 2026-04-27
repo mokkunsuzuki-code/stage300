@@ -1,0 +1,88 @@
+{
+  "stage": "stage286",
+  "title": "QSP Internal Connection Product Specification",
+  "version": "1.0.0",
+  "status": "stable-draft",
+  "purpose": "Define the internal product contract between QSP decision-making and VEP exposure artifacts.",
+  "design_goals": [
+    "Make QSP-to-VEP integration deterministic",
+    "Represent fail-closed behavior as a first-class product rule",
+    "Separate internal decision logic from external exposure format",
+    "Enable future replacement of cryptographic/session engines without breaking the public contract"
+  ],
+  "product_layers": {
+    "input_layer": {
+      "description": "Normalized input entering the QSP engine.",
+      "required_fields": [
+        "session_id",
+        "subject",
+        "policy",
+        "evidence"
+      ]
+    },
+    "decision_layer": {
+      "description": "Core evaluation result produced by QSP.",
+      "required_fields": [
+        "decision",
+        "reason",
+        "scores",
+        "verified_claims"
+      ],
+      "allowed_decisions": [
+        "accept",
+        "pending",
+        "reject"
+      ]
+    },
+    "enforcement_layer": {
+      "description": "Operational behavior of the product after the decision.",
+      "required_fields": [
+        "fail_closed",
+        "execution_state",
+        "allowed_outputs"
+      ]
+    },
+    "exposure_layer": {
+      "description": "Stable contract exported to VEP/public verification.",
+      "required_fields": [
+        "public_status",
+        "exposure_artifacts",
+        "contract_sha256"
+      ]
+    }
+  },
+  "contract_rules": [
+    {
+      "id": "RULE-001",
+      "title": "Deterministic session envelope",
+      "description": "All QSP decisions must be wrapped in a stable session envelope before export."
+    },
+    {
+      "id": "RULE-002",
+      "title": "Fail-closed must be explicit",
+      "description": "The contract must explicitly state whether the product halted safely when policy requirements were not met."
+    },
+    {
+      "id": "RULE-003",
+      "title": "Decision and exposure are separate",
+      "description": "The internal QSP decision is the source of truth; the VEP layer only exposes the normalized result."
+    },
+    {
+      "id": "RULE-004",
+      "title": "Public artifacts derive from contract",
+      "description": "Published manifests, receipts, and verification pages must derive from the normalized product contract, not ad hoc files."
+    },
+    {
+      "id": "RULE-005",
+      "title": "Engine replaceability",
+      "description": "Future engines such as QKD-backed, PQC-backed, or hybrid engines may replace internal modules if they emit the same contract."
+    }
+  ],
+  "future_extensions": [
+    "QKD session binding",
+    "PQC signature binding",
+    "Threshold-signature approval",
+    "Remote attested execution",
+    "Multi-tenant SaaS product mode"
+  ]
+}

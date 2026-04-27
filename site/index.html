@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Stage300 AI Vulnerability Verification Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0f172a; color: #e5e7eb; margin: 0; padding: 40px; }
+    .card { max-width: 980px; margin: auto; background: #111827; border: 1px solid #334155; border-radius: 18px; padding: 28px; }
+    .badge { display: inline-block; padding: 8px 12px; border-radius: 999px; background: #2563eb; color: white; font-weight: 700; }
+    .accept { color: #22c55e; font-size: 42px; font-weight: 800; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+    .box { background: #020617; border: 1px solid #334155; border-radius: 14px; padding: 16px; }
+    pre { background: #020617; padding: 14px; border-radius: 12px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">QSP / VEP / Stage300</div>
+    <h1>AI Vulnerability Verification Demo</h1>
+
+    <p>Stage300 shows how a safe AI vulnerability record passes through the Stage299 Gate.</p>
+
+    <div class="accept">ACCEPT</div>
+
+    <div class="grid">
+      <div class="box">
+        <h2>Evidence</h2>
+        <p>Safe simulated AI vulnerability record.</p>
+      </div>
+      <div class="box">
+        <h2>Manifest</h2>
+        <p>The evidence is hashed and converted into a verifiable manifest.</p>
+      </div>
+      <div class="box">
+        <h2>Gate</h2>
+        <p>Stage299 evaluates the manifest and returns accept.</p>
+      </div>
+    </div>
+
+    <h2>Core Flow</h2>
+    <pre>AI vulnerability evidence
+→ manifest
+→ Stage299 Gate
+→ accept</pre>
+
+    <h2>Safety Note</h2>
+    <p>This is a sanitized public demo. It does not include working exploit instructions.</p>
+  </div>
+</body>
+</html>

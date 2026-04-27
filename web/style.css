@@ -1,0 +1,120 @@
+:root {
+  --bg: #0b1020;
+  --panel: #121933;
+  --panel-2: #1a2447;
+  --text: #e8ecf8;
+  --muted: #a9b4d0;
+  --ok: #35c759;
+  --warn: #ffcc00;
+  --bad: #ff453a;
+  --line: #2a3563;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #0b1020 0%, #0f1730 100%);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+
+.card {
+  background: rgba(18, 25, 51, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.value {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.badge {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.badge.ok { background: rgba(53,199,89,0.16); color: #8df0a5; border: 1px solid rgba(53,199,89,0.35); }
+.badge.warn { background: rgba(255,204,0,0.14); color: #ffe27a; border: 1px solid rgba(255,204,0,0.35); }
+.badge.bad { background: rgba(255,69,58,0.14); color: #ff9d96; border: 1px solid rgba(255,69,58,0.35); }
+
+.section { margin-top: 28px; }
+
+ul { margin: 10px 0 0; padding-left: 20px; }
+li { margin: 8px 0; line-height: 1.6; }
+
+pre {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  overflow-x: auto;
+  color: #dfe7ff;
+}
+
+.footer {
+  margin-top: 36px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.hero {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.hero-status {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.hero-substatus {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.hero-summary {
+  color: var(--text);
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.ok-text { color: #8df0a5; }
+.warn-text { color: #ffe27a; }
+.bad-text { color: #ff9d96; }

@@ -1,0 +1,7 @@
+{
+  "subject": "Unsigned AI vulnerability verification demo",
+  "evidence_type": "ai-vulnerability-url",
+  "verification_url": "https://example.com/stage300/ai-vulnerability-demo",
+  "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "signature_valid": false
+}

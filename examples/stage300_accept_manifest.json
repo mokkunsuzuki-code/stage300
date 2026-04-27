@@ -1,0 +1,11 @@
+{
+  "content_file": "demo/ai_vulnerability_output.json",
+  "content_sha256": "7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4",
+  "created_at": "2026-04-27T11:37:30.416338+00:00",
+  "evidence_type": "ai-vulnerability-url",
+  "signature_valid": true,
+  "source_note": "Safe simulated AI vulnerability evidence for public demo.",
+  "stage": 300,
+  "subject": "Stage300 AI vulnerability verification demo",
+  "verification_url": "https://mokkunsuzuki-code.github.io/stage300/"
+}
