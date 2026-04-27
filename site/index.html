@@ -1,158 +1,194 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <title>Stage300 AI Evidence Monetization Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { margin:0; font-family: system-ui, sans-serif; background:#07111f; color:#e5e7eb; }
-    .wrap { max-width:1200px; margin:auto; padding:36px 20px; }
-    .hero,.card { background:#0f172a; border:1px solid #334155; border-radius:20px; padding:24px; margin-bottom:18px; }
-    .badge { display:inline-block; background:#2563eb; padding:7px 12px; border-radius:999px; font-weight:700; }
-    h1 { font-size:42px; margin:16px 0 8px; }
-    h2 { margin-top:0; }
-    .muted { color:#94a3b8; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; }
-    .box { background:#020617; border:1px solid #334155; border-radius:14px; padding:16px; }
-    .big { font-size:34px; font-weight:900; }
-    .accept { color:#22c55e; }
-    .pending { color:#facc15; }
-    .reject { color:#ef4444; }
-    .price { font-size:28px; font-weight:900; color:#93c5fd; }
-    pre { background:#020617; padding:14px; border-radius:10px; white-space:pre-wrap; overflow:auto; }
-    table { width:100%; border-collapse:collapse; }
-    th,td { border-bottom:1px solid #334155; padding:10px; text-align:left; }
-    th { color:#93c5fd; }
-    .hash { word-break:break-all; font-family:monospace; color:#bfdbfe; }
-  </style>
+<meta charset="utf-8">
+<title>Stage300 AI Evidence Enterprise Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { background:#07111f; color:#e5e7eb; font-family:system-ui; margin:0; padding:40px; }
+.card { background:#0f172a; border:1px solid #334155; border-radius:18px; padding:22px; margin-bottom:18px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; }
+.box { background:#020617; border:1px solid #334155; border-radius:14px; padding:16px; }
+h1 { font-size:38px; margin:0 0 12px; }
+h2 { margin-top:0; }
+.big { font-size:32px; font-weight:900; }
+.accept { color:#22c55e; }
+.warn { color:#facc15; }
+.danger { color:#ef4444; }
+.muted { color:#94a3b8; }
+pre { background:#020617; border:1px solid #334155; border-radius:12px; padding:14px; white-space:pre-wrap; overflow:auto; }
+table { width:100%; border-collapse:collapse; }
+th,td { border-bottom:1px solid #334155; padding:10px; text-align:left; }
+th { color:#93c5fd; }
+</style>
 </head>
 <body>
-<div class="wrap">
 
-  <section class="hero">
-    <span class="badge">QSP / VEP / Stage300</span>
-    <h1>AI出力を「証拠」に変える<br>Evidence Infrastructure</h1>
-    <p class="muted">
-      Stage300は、AI脆弱性記録をハッシュ化・マニフェスト化し、
-      Stage299 Gateで accept / pending / reject を判定する企業向け検証ダッシュボードです。
-    </p>
-  </section>
-
-  <section class="grid">
-    <div class="box"><div class="muted">Decision</div><div class="big accept">ACCEPT</div></div>
-    <div class="box"><div class="muted">Trust Score</div><div class="big">1.00</div></div>
-    <div class="box"><div class="muted">Fail-Closed</div><div class="big accept">Enabled</div></div>
-    <div class="box"><div class="muted">Gate Engine</div><div class="big">Stage299</div></div>
-  </section>
-
-  <section class="card">
-    <h2>何を解決するか</h2>
-    <div class="grid">
-      <div class="box">
-        <h3>Before</h3>
-        <p>AI出力はスクショ・ログ・文章だけでは信用されにくく、改ざんや否認のリスクがあります。</p>
-      </div>
-      <div class="box">
-        <h3>After</h3>
-        <p>AI出力をハッシュ化し、マニフェスト化し、Gate判定により検証可能な証拠に変換します。</p>
-      </div>
-      <div class="box">
-        <h3>Business Impact</h3>
-        <p>監査・法務・脆弱性報告・規制対応で、AI出力を提出可能な証拠として扱えます。</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Enterprise Trust Score Breakdown</h2>
-    <div class="grid">
-      <div class="box"><b>Integrity</b><div class="big">1.00</div><p class="muted">改ざん検知</p></div>
-      <div class="box"><b>Origin</b><div class="big">0.80</div><p class="muted">出所・署名。今後GPG / Sigstore / YubiKeyで強化。</p></div>
-      <div class="box"><b>Safety</b><div class="big">1.00</div><p class="muted">公開デモに危険手順なし。</p></div>
-      <div class="box"><b>Reproducibility</b><div class="big">1.00</div><p class="muted">第三者がURLで確認可能。</p></div>
-      <div class="box"><b>Completeness</b><div class="big">0.90</div><p class="muted">証拠項目を構造化。</p></div>
-      <div class="box"><b>Audit Ready</b><div class="big">0.90</div><p class="muted">監査提出用レポート化に対応。</p></div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Use Cases</h2>
-    <div class="grid">
-      <div class="box"><h3>AI監査ログ</h3><p>社内AIの出力を証拠として保存し、後から検証。</p></div>
-      <div class="box"><h3>脆弱性報告</h3><p>スクショではなく、検証可能な証拠URLとして提出。</p></div>
-      <div class="box"><h3>法務・事故対応</h3><p>AI事故時に「その出力が存在した」ことを証明。</p></div>
-      <div class="box"><h3>規制対応</h3><p>AI出力のトレーサビリティ・説明責任に対応。</p></div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Pricing Model Example</h2>
-    <div class="grid">
-      <div class="box">
-        <h3>Starter</h3>
-        <div class="price">¥30,000 / month</div>
-        <p class="muted">小規模チーム向け。月1,000件までのAI出力証拠化。</p>
-      </div>
-      <div class="box">
-        <h3>Pro</h3>
-        <div class="price">¥150,000 / month</div>
-        <p class="muted">セキュリティ・監査チーム向け。検索、CSV/JSONエクスポート、レポート生成。</p>
-      </div>
-      <div class="box">
-        <h3>Enterprise</h3>
-        <div class="price">Custom</div>
-        <p class="muted">API連携、署名連携、監査証跡、SLA、専用サポート。</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2>Sales Message</h2>
-    <pre>AIの出力を信用する必要はありません。
-必要なのは、AI出力を検証可能な証拠に変換することです。
-
-QSP / VEP は、AI出力をハッシュ化し、マニフェスト化し、
-Gateで判定することで、監査・法務・セキュリティに使える証拠レイヤーを提供します。</pre>
-  </section>
-
-  <section class="card">
-    <h2>Verification Details</h2>
-    <p>Evidence SHA-256:</p>
-    <p class="hash">7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4</p>
-    <pre>{
-  "decision": "accept",
-  "fail_closed": true,
-  "reason": "Evidence is valid and signature is valid.",
-  "signature_valid": true,
-  "stage": 299,
-  "trust_score": 1.0,
-  "verification_ok": true
-}</pre>
-  </section>
-
-  <section class="card">
-    <h2>導入判断</h2>
-    <table>
-      <thead>
-        <tr><th>企業の課題</th><th>Stage300で示す価値</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>AIログが信用できない</td><td>ハッシュとmanifestで証拠化</td></tr>
-        <tr><td>監査に出せない</td><td>レポート化・JSON化・SHA256化</td></tr>
-        <tr><td>責任の所在が曖昧</td><td>出力・時点・証拠を固定</td></tr>
-        <tr><td>脆弱性報告が弱い</td><td>検証URL付きで提出可能</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="card">
-    <h2>Safety Notice</h2>
-    <p class="muted">
-      このページは安全な公開デモです。実際の攻撃コード、悪用可能な手順、
-      実在サービスへの攻撃方法は含みません。
-    </p>
-  </section>
-
+<div class="card">
+  <h1>Stage300: AI Vulnerability Evidence</h1>
+  <div class="big accept">ACCEPT</div>
+  <p class="muted">AI脆弱性記録を、検証可能な証拠として固定・判定する企業向けダッシュボードです。</p>
 </div>
+
+<div class="card">
+  <h2>Enterprise Trust Score Breakdown</h2>
+  <div class="grid">
+    <div class="box"><b>Integrity</b><div class="big">1.00</div><p>改ざん検知：SHA-256で固定済み</p></div>
+    <div class="box"><b>Origin</b><div class="big warn">0.80</div><p>出所証明：署名連携は次段階で強化</p></div>
+    <div class="box"><b>Safety</b><div class="big">1.00</div><p>安全性：攻撃手順なし</p></div>
+    <div class="box"><b>Reproducibility</b><div class="big">1.00</div><p>第三者再検証可能</p></div>
+    <div class="box"><b>Completeness</b><div class="big">0.90</div><p>証拠項目ほぼ完備</p></div>
+    <div class="box"><b>Audit Ready</b><div class="big">0.90</div><p>監査提出可能レベル</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Final Trust Score</h2>
+  <div class="big accept">0.94</div>
+  <p class="muted">判定: ACCEPT。ただし Origin 強化により企業導入レベルをさらに上げられます。</p>
+</div>
+
+<div class="card">
+  <h2>Current Weak Points</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>現在の状態</th>
+        <th>企業目線の懸念</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Origin</td>
+        <td>signature_valid による簡易表現</td>
+        <td>本当に誰が発行した証拠か、より強い証明が必要</td>
+      </tr>
+      <tr>
+        <td>Timestamp</td>
+        <td>作成時刻はmanifest内に記録</td>
+        <td>外部タイムスタンプで固定されているか</td>
+      </tr>
+      <tr>
+        <td>Audit Trail</td>
+        <td>静的デモ</td>
+        <td>履歴・検索・エクスポートが必要</td>
+      </tr>
+      <tr>
+        <td>API Integration</td>
+        <td>ローカルGate中心</td>
+        <td>企業システムに組み込めるAPIが必要</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Recommended Next Controls</h2>
+  <div class="grid">
+    <div class="box">
+      <h3>1. GPG / Sigstore Signature</h3>
+      <p>証拠の発行者を検証し、Origin Scoreを 0.80 → 0.95 へ引き上げる。</p>
+    </div>
+    <div class="box">
+      <h3>2. YubiKey-backed Signing</h3>
+      <p>秘密鍵をPC外に置き、署名の信頼性をさらに強化する。</p>
+    </div>
+    <div class="box">
+      <h3>3. OpenTimestamps / Bitcoin Anchor</h3>
+      <p>証拠がその時点で存在したことを外部時刻で固定する。</p>
+    </div>
+    <div class="box">
+      <h3>4. SQLite Audit Log</h3>
+      <p>検証履歴を保存し、監査・検索・CSV/JSONエクスポートに対応する。</p>
+    </div>
+    <div class="box">
+      <h3>5. Verification API</h3>
+      <p>企業のAIログ基盤・SOC・監査システムに組み込める形にする。</p>
+    </div>
+    <div class="box">
+      <h3>6. Evidence Package Export</h3>
+      <p>HTML / JSON / SHA256 の提出用レポートパッケージを生成する。</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Enterprise Roadmap</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>内容</th>
+        <th>価値</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Phase 1</td>
+        <td>AI出力のハッシュ化・manifest化・Gate判定</td>
+        <td>AI出力を証拠化</td>
+      </tr>
+      <tr>
+        <td>Phase 2</td>
+        <td>GPG / Sigstore / YubiKey署名</td>
+        <td>出所証明を強化</td>
+      </tr>
+      <tr>
+        <td>Phase 3</td>
+        <td>OpenTimestamps / Bitcoin Anchor</td>
+        <td>存在時刻を外部固定</td>
+      </tr>
+      <tr>
+        <td>Phase 4</td>
+        <td>SQLite / Export / Report Package</td>
+        <td>監査・提出対応</td>
+      </tr>
+      <tr>
+        <td>Phase 5</td>
+        <td>API / SaaS / Enterprise Integration</td>
+        <td>収益化・企業導入</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Gate Result JSON</h2>
+  <pre>{
+  "decision": "accept",
+  "final_trust_score": 0.94,
+  "breakdown": {
+    "integrity": 1.00,
+    "origin": 0.80,
+    "safety": 1.00,
+    "reproducibility": 1.00,
+    "completeness": 0.90,
+    "audit_ready": 0.90
+  },
+  "weak_points": [
+    "Origin proof should be upgraded to GPG / Sigstore / YubiKey",
+    "External timestamp anchoring should be added",
+    "Audit log persistence should be added"
+  ],
+  "decision_reason": "Evidence is valid and accepted, with recommended controls for enterprise-grade assurance."
+}</pre>
+</div>
+
+<div class="card">
+  <h2>Business Value</h2>
+  <div class="grid">
+    <div class="box"><h3>AI監査</h3><p>AIログを証拠として保存し、後から検証可能にする。</p></div>
+    <div class="box"><h3>脆弱性報告</h3><p>スクショではなく、検証可能な証拠URLとして提出する。</p></div>
+    <div class="box"><h3>法務・事故対応</h3><p>AI事故時に「その出力が存在した」ことを説明できる。</p></div>
+    <div class="box"><h3>収益化</h3><p>証拠化API、監査レポート、Enterprise SaaSへ展開可能。</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Safety Notice</h2>
+  <p class="muted">このページは安全な公開デモです。実際の攻撃コード、悪用可能な手順、実在サービスへの攻撃方法は含みません。</p>
+</div>
+
 </body>
 </html>
