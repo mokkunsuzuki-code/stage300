@@ -1,134 +1,241 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="utf-8">
-  <title>AI Vulnerability Verification</title>
+  <title>QSP / VEP / Stage300 - AI Vulnerability Evidence Gate</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    :root {
+      --bg: #07111f;
+      --panel: #0f1b2d;
+      --panel2: #111f35;
+      --line: #27364f;
+      --text: #eaf0f8;
+      --muted: #9fb0c7;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --red: #ef4444;
+      --blue: #60a5fa;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family: system-ui, sans-serif;
-      background: #020617;
-      color: #e5e7eb;
       margin: 0;
-      padding: 40px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, .22), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, .14), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
     }
-    .container {
-      max-width: 1100px;
-      margin: auto;
-    }
-    .card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 20px;
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 42px 20px 70px; }
+    .hero {
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(15, 27, 45, .96), rgba(17, 31, 53, .92));
+      border-radius: 26px;
+      padding: 34px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.32);
     }
     .badge {
-      display: inline-block;
-      padding: 6px 12px;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 13px;
       border-radius: 999px;
-      background: #2563eb;
+      background: rgba(96,165,250,.16);
+      border: 1px solid rgba(96,165,250,.35);
+      color: #bfdbfe;
       font-weight: 700;
+      font-size: 13px;
     }
-    .accept {
-      color: #22c55e;
-      font-size: 56px;
-      font-weight: 900;
-      margin: 10px 0;
-    }
-    .grid {
+    h1 { font-size: clamp(30px, 5vw, 56px); line-height: 1.05; margin: 20px 0 12px; letter-spacing: -0.04em; }
+    h2 { margin: 0 0 14px; font-size: 22px; }
+    p { margin: 0; color: var(--muted); }
+    .lead { max-width: 820px; font-size: 18px; color: #cbd5e1; }
+    .decision {
+      margin-top: 28px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
     }
-    .box {
-      background: #020617;
-      border: 1px solid #334155;
-      border-radius: 14px;
-      padding: 16px;
+    .acceptBox {
+      border-radius: 22px;
+      padding: 26px;
+      background: rgba(34,197,94,.10);
+      border: 1px solid rgba(34,197,94,.45);
+    }
+    .acceptLabel { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; }
+    .acceptText { color: var(--green); font-weight: 950; font-size: 58px; line-height: 1; margin-top: 8px; }
+    .reason { margin-top: 12px; color: #d1fae5; }
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .metric, .card {
+      border: 1px solid var(--line);
+      background: rgba(15,27,45,.86);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .k { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .v { margin-top: 5px; font-weight: 850; font-size: 22px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 18px; }
+    .section { margin-top: 20px; }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .step {
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.55);
+      border-radius: 18px;
+      padding: 18px;
+      position: relative;
+    }
+    .num {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: rgba(96,165,250,.18);
+      border: 1px solid rgba(96,165,250,.35);
+      color: #bfdbfe;
+      font-weight: 900;
+      margin-bottom: 10px;
     }
     pre {
-      background: #020617;
-      border-radius: 12px;
-      padding: 16px;
+      white-space: pre-wrap;
       overflow-x: auto;
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 18px;
+      color: #dbeafe;
+      font-size: 13px;
     }
-    .label {
-      color: #94a3b8;
-      font-size: 12px;
+    .hash { word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #bfdbfe; }
+    .warn {
+      border-color: rgba(250,204,21,.35);
+      background: rgba(250,204,21,.08);
     }
-    .value {
-      font-weight: 700;
-      margin-top: 4px;
+    .foot { margin-top: 28px; color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 820px) {
+      .decision, .grid, .flow { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-
-    <div class="card">
+  <main class="wrap">
+    <section class="hero">
       <div class="badge">QSP / VEP / Stage300</div>
-      <h1>AI Vulnerability Verification</h1>
+      <h1>AI脆弱性記録を<br>検証可能な証拠に変換する</h1>
+      <p class="lead">
+        Stage300は、安全なAI脆弱性デモ記録をハッシュ化し、マニフェスト化し、
+        Stage299 Gateで判定する公開検証ページです。
+      </p>
 
-      <div class="accept">ACCEPT</div>
+      <div class="decision">
+        <div class="acceptBox">
+          <div class="acceptLabel">Gate Decision</div>
+          <div class="acceptText">ACCEPT</div>
+          <p class="reason">証拠は有効な構造を持ち、Gate条件を満たしています。</p>
+        </div>
 
-      <p>This AI vulnerability record has been verified as tamper-resistant evidence.</p>
-    </div>
-
-    <div class="card">
-      <h2>Verification Summary</h2>
-      <div class="grid">
-        <div class="box">
-          <div class="label">Decision</div>
-          <div class="value">accept</div>
-        </div>
-        <div class="box">
-          <div class="label">Trust Score</div>
-          <div class="value">1.00</div>
-        </div>
-        <div class="box">
-          <div class="label">Fail-Closed</div>
-          <div class="value">Enabled</div>
-        </div>
-        <div class="box">
-          <div class="label">Stage</div>
-          <div class="value">300</div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="k">Trust Score</div>
+            <div class="v">1.00</div>
+          </div>
+          <div class="metric">
+            <div class="k">Fail-Closed</div>
+            <div class="v">Enabled</div>
+          </div>
+          <div class="metric">
+            <div class="k">Gate</div>
+            <div class="v">Stage299</div>
+          </div>
+          <div class="metric">
+            <div class="k">Demo</div>
+            <div class="v">Stage300</div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="card">
-      <h2>Evidence</h2>
-      <pre>{
-  "type": "safe_ai_vulnerability_demo",
-  "status": "sanitized",
-  "note": "No exploit instructions included"
-}</pre>
-    </div>
+    <section class="grid section">
+      <div class="card">
+        <h2>1. Evidence</h2>
+        <p>安全にシミュレーションされたAI脆弱性記録を使用します。実害のある攻撃手順は含みません。</p>
+      </div>
+      <div class="card">
+        <h2>2. Manifest</h2>
+        <p>証拠をSHA-256で固定し、第三者が検証できるマニフェストに変換します。</p>
+      </div>
+      <div class="card">
+        <h2>3. Gate</h2>
+        <p>Stage299 Gateが accept / pending / reject を判断します。</p>
+      </div>
+    </section>
 
-    <div class="card">
-      <h2>Hash (SHA256)</h2>
-      <pre>7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4</pre>
-    </div>
-
-    <div class="card">
+    <section class="card section">
       <h2>Verification Flow</h2>
-      <pre>AI output
-→ hash
-→ manifest
-→ Stage299 Gate
-→ ACCEPT</pre>
-    </div>
+      <div class="flow">
+        <div class="step"><div class="num">1</div><strong>AI Output</strong><p>AI脆弱性記録</p></div>
+        <div class="step"><div class="num">2</div><strong>Hash</strong><p>改ざん検知</p></div>
+        <div class="step"><div class="num">3</div><strong>Manifest</strong><p>証拠を構造化</p></div>
+        <div class="step"><div class="num">4</div><strong>Gate</strong><p>ACCEPT判定</p></div>
+      </div>
+    </section>
 
-    <div class="card">
-      <h2>Why This Matters</h2>
-      <ul>
-        <li>AI outputs are normally unverifiable</li>
-        <li>This system converts them into evidence</li>
-        <li>Evidence can be validated by third parties</li>
-      </ul>
-    </div>
+    <section class="card section">
+      <h2>Evidence SHA-256</h2>
+      <p class="hash">7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4</p>
+    </section>
 
-  </div>
+    <section class="card section">
+      <h2>Gate Result JSON</h2>
+      <pre>{
+  "decision": "accept",
+  "fail_closed": true,
+  "reason": "Evidence is valid and signature is valid.",
+  "signature_valid": true,
+  "stage": 299,
+  "trust_score": 1.0,
+  "verification_ok": true
+}</pre>
+    </section>
+
+    <section class="card section">
+      <h2>Business Value</h2>
+      <div class="grid">
+        <div class="card">
+          <h2>AI監査</h2>
+          <p>AIログを証拠として保存し、後から検証可能にします。</p>
+        </div>
+        <div class="card">
+          <h2>脆弱性報告</h2>
+          <p>スクリーンショットではなく、検証可能な証拠URLとして提出できます。</p>
+        </div>
+        <div class="card">
+          <h2>規制対応</h2>
+          <p>AI出力の説明責任・トレーサビリティに対応できます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card warn section">
+      <h2>Safety Notice</h2>
+      <p>
+        このページは安全な公開デモです。実際の攻撃コード、悪用可能な手順、
+        実在サービスへの攻撃方法は含みません。
+      </p>
+    </section>
+
+    <div class="foot">
+      Stage299 = Gate Engine / Stage300 = AI Vulnerability Evidence Showcase
+    </div>
+  </main>
 </body>
 </html>
