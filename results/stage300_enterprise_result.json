@@ -1,0 +1,13 @@
+{
+  "content_sha256_actual": "7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4",
+  "content_sha256_expected": "7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4",
+  "decision": "pending",
+  "fail_closed": true,
+  "gpg_reason": "No signature file provided.",
+  "gpg_signature_valid": false,
+  "hash_match": true,
+  "reason": "Content hash matches, but GPG signature is missing or invalid.",
+  "stage": 300,
+  "trust_score": 0.75,
+  "verification_ok": true
+}
