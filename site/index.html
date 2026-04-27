@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>Stage300 Live Verification</title>
+<title>Stage300 Live Evidence Verification</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body{background:#07111f;color:#e5e7eb;font-family:system-ui;margin:0;padding:40px}
@@ -11,9 +11,11 @@ body{background:#07111f;color:#e5e7eb;font-family:system-ui;margin:0;padding:40p
 .box{background:#020617;border:1px solid #334155;border-radius:14px;padding:16px}
 .big{font-size:34px;font-weight:900}.accept{color:#22c55e}.pending{color:#facc15}.reject{color:#ef4444}.muted{color:#94a3b8}
 textarea,input,button,pre{width:100%;box-sizing:border-box;border-radius:12px;border:1px solid #334155}
-textarea,input{background:#020617;color:#dbeafe;padding:12px}textarea{min-height:220px;font-family:monospace}
+textarea,input{background:#020617;color:#dbeafe;padding:12px}textarea{min-height:180px;font-family:monospace}
 button{background:#2563eb;color:white;padding:12px;font-weight:800;margin-top:10px;cursor:pointer}
-pre{background:#020617;color:#dbeafe;padding:14px;white-space:pre-wrap}
+pre{background:#020617;color:#dbeafe;padding:14px;white-space:pre-wrap;overflow:auto}
+table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #334155;padding:8px;text-align:left;font-size:14px}
+th{color:#93c5fd}.hash{word-break:break-all;font-family:monospace;color:#bfdbfe}
 </style>
 </head>
 <body>
@@ -21,16 +23,32 @@ pre{background:#020617;color:#dbeafe;padding:14px;white-space:pre-wrap}
 <div class="card">
   <h1>QSP / VEP / Stage300</h1>
   <h2>Live AI Evidence Verification</h2>
-  <p class="muted">manifest JSONを入力して、その場で accept / pending / reject を検証できます。</p>
+  <p class="muted">
+    実データとmanifestを入力し、SHA-256照合・Gate判定・履歴保存・CSV/JSONエクスポートを行います。
+  </p>
 </div>
 
 <div class="card">
-  <h2>自分で検証する</h2>
+  <h2>1. 実データを入力</h2>
+  <p class="muted">ここにAI出力・AI脆弱性記録・監査対象ログなどを貼り付けます。</p>
+  <textarea id="contentInput">{
+  "demo_type": "safe_ai_vulnerability_demo",
+  "target": "simulated-ai-system",
+  "risk_category": "unsafe-output",
+  "description": "This is a safe simulated AI vulnerability record. It does not contain working exploit instructions.",
+  "ai_output_summary": "The simulated AI produced an unsafe response pattern.",
+  "safety_note": "This record is sanitized for public demonstration."
+}</textarea>
+  <button onclick="calculateContentHash()">SHA-256を計算</button>
+</div>
 
-  <label>Verification URL</label>
-  <input id="urlInput" value="https://mokkunsuzuki-code.github.io/stage300/">
+<div class="card">
+  <h2>2. 実データ SHA-256</h2>
+  <p class="hash" id="actualHash">未計算</p>
+</div>
 
-  <label>Manifest JSON</label>
+<div class="card">
+  <h2>3. Manifest JSON</h2>
   <textarea id="manifestInput">{
   "subject": "Stage300 AI vulnerability verification demo",
   "evidence_type": "ai-vulnerability-url",
@@ -40,6 +58,7 @@ pre{background:#020617;color:#dbeafe;padding:14px;white-space:pre-wrap}
   "safety_sanitized": true
 }</textarea>
 
+  <button onclick="syncHashToManifest()">計算したSHA-256をmanifestに反映</button>
   <button onclick="verifyManifest()">検証する</button>
   <button onclick="loadAccept()">ACCEPTサンプル</button>
   <button onclick="loadPending()">PENDINGサンプル</button>
@@ -47,119 +66,275 @@ pre{background:#020617;color:#dbeafe;padding:14px;white-space:pre-wrap}
 </div>
 
 <div class="card">
-  <h2>検証結果</h2>
-  <div id="decision" class="big accept">ACCEPT</div>
-  <p id="reason" class="muted">Evidence is valid and signature is valid.</p>
+  <h2>4. 検証結果</h2>
+  <div id="decision" class="big pending">PENDING</div>
+  <p id="reason" class="muted">まだ検証されていません。</p>
 
   <div class="grid">
-    <div class="box"><b>Trust Score</b><div id="score" class="big">1.00</div></div>
-    <div class="box"><b>Verification OK</b><div id="verificationOk" class="big">true</div></div>
-    <div class="box"><b>Signature Valid</b><div id="signatureValid" class="big">true</div></div>
+    <div class="box"><b>Trust Score</b><div id="score" class="big">0.00</div></div>
+    <div class="box"><b>Manifest OK</b><div id="verificationOk" class="big">false</div></div>
+    <div class="box"><b>Hash Match</b><div id="hashMatch" class="big">false</div></div>
+    <div class="box"><b>Signature Valid</b><div id="signatureValid" class="big">false</div></div>
     <div class="box"><b>Fail-Closed</b><div class="big">true</div></div>
   </div>
 </div>
 
 <div class="card">
-  <h2>Gate Result JSON</h2>
-  <pre id="resultJson"></pre>
+  <h2>5. 企業向けスコア</h2>
+  <div class="grid">
+    <div class="box"><b>Integrity</b><div id="integrity" class="big">0.00</div><p class="muted">実データとmanifestのSHA-256照合</p></div>
+    <div class="box"><b>Origin</b><div id="origin" class="big">0.40</div><p class="muted">署名状態</p></div>
+    <div class="box"><b>Safety</b><div id="safety" class="big">1.00</div><p class="muted">安全化済み</p></div>
+    <div class="box"><b>Audit Ready</b><div id="audit" class="big">0.20</div><p class="muted">監査提出レベル</p></div>
+  </div>
 </div>
 
 <div class="card">
-  <h2>企業向けスコア</h2>
+  <h2>6. Gate Result JSON</h2>
+  <pre id="resultJson">{}</pre>
+</div>
+
+<div class="card">
+  <h2>7. 検証履歴 / エクスポート</h2>
+  <button onclick="exportJSON()">JSONエクスポート</button>
+  <button onclick="exportCSV()">CSVエクスポート</button>
+  <button onclick="clearHistory()">履歴クリア</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Decision</th>
+        <th>Score</th>
+        <th>Hash Match</th>
+        <th>Signature</th>
+        <th>SHA-256</th>
+      </tr>
+    </thead>
+    <tbody id="historyTable"></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Business Value</h2>
   <div class="grid">
-    <div class="box"><b>Integrity</b><div id="integrity" class="big">1.00</div><p class="muted">SHA-256形式</p></div>
-    <div class="box"><b>Origin</b><div id="origin" class="big">0.80</div><p class="muted">署名状態</p></div>
-    <div class="box"><b>Safety</b><div id="safety" class="big">1.00</div><p class="muted">安全化済み</p></div>
-    <div class="box"><b>Audit Ready</b><div id="audit" class="big">0.90</div><p class="muted">監査提出レベル</p></div>
+    <div class="box"><h3>AI監査</h3><p>AIログを証拠として保存し、後から検証可能にします。</p></div>
+    <div class="box"><h3>脆弱性報告</h3><p>スクショではなく、検証可能な証拠URLとして提出できます。</p></div>
+    <div class="box"><h3>規制対応</h3><p>AI出力の説明責任・トレーサビリティに対応します。</p></div>
+    <div class="box"><h3>収益化</h3><p>証拠化API・監査レポート・Enterprise SaaSへ展開できます。</p></div>
   </div>
 </div>
 
 <script>
-function isSha256(v){return typeof v==="string" && /^[a-fA-F0-9]{64}$/.test(v)}
+let lastActualHash = "";
+let lastResult = {};
+let history = JSON.parse(localStorage.getItem("stage300_history") || "[]");
 
-function verifyManifest(){
-  let manifest={}, decision="reject", reason="", verificationOk=false, signatureValid=false, score=0
+function textEncoderBytes(text){
+  return new TextEncoder().encode(text);
+}
 
-  try{
-    manifest=JSON.parse(document.getElementById("manifestInput").value)
-    const required=["subject","evidence_type","verification_url","content_sha256"]
-    const hasRequired=required.every(k=>manifest[k])
-    const hashOk=isSha256(manifest.content_sha256)
-    verificationOk=hasRequired && hashOk
-    signatureValid=manifest.signature_valid===true
+async function sha256Hex(text){
+  const hashBuffer = await crypto.subtle.digest("SHA-256", textEncoderBytes(text));
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
 
-    if(verificationOk && signatureValid){
-      decision="accept"; reason="Evidence is valid and signature is valid."; score=1.0
-    }else if(verificationOk){
-      decision="pending"; reason="Evidence is valid, but signature is missing or not yet verified."; score=0.6
-    }else{
-      decision="reject"; reason="Evidence is invalid. Fail-closed Gate rejected the input."; score=0.0
+function isSha256(v){
+  return typeof v === "string" && /^[a-fA-F0-9]{64}$/.test(v);
+}
+
+async function calculateContentHash(){
+  const content = document.getElementById("contentInput").value;
+  lastActualHash = await sha256Hex(content);
+  document.getElementById("actualHash").textContent = lastActualHash;
+  return lastActualHash;
+}
+
+async function syncHashToManifest(){
+  const hash = lastActualHash || await calculateContentHash();
+  try {
+    const manifest = JSON.parse(document.getElementById("manifestInput").value);
+    manifest.content_sha256 = hash;
+    document.getElementById("manifestInput").value = JSON.stringify(manifest, null, 2);
+  } catch(e) {
+    alert("manifest JSONが壊れています。先にJSONを修正してください。");
+  }
+}
+
+async function verifyManifest(){
+  const actualHash = lastActualHash || await calculateContentHash();
+
+  let manifest = {};
+  let decision = "reject";
+  let reason = "";
+  let verificationOk = false;
+  let signatureValid = false;
+  let hashMatch = false;
+  let score = 0.0;
+
+  try {
+    manifest = JSON.parse(document.getElementById("manifestInput").value);
+    const required = ["subject", "evidence_type", "verification_url", "content_sha256"];
+    const hasRequired = required.every(k => manifest[k]);
+    const hashFormatOk = isSha256(manifest.content_sha256);
+    hashMatch = hashFormatOk && manifest.content_sha256.toLowerCase() === actualHash.toLowerCase();
+    verificationOk = hasRequired && hashFormatOk && hashMatch;
+    signatureValid = manifest.signature_valid === true;
+
+    if (verificationOk && signatureValid) {
+      decision = "accept";
+      reason = "Content hash matches and signature is valid.";
+      score = 1.0;
+    } else if (verificationOk) {
+      decision = "pending";
+      reason = "Content hash matches, but signature is missing or not yet verified.";
+      score = 0.75;
+    } else {
+      decision = "reject";
+      reason = "Content hash verification failed or manifest is incomplete. Fail-closed Gate rejected the input.";
+      score = 0.0;
     }
-  }catch(e){
-    decision="reject"; reason="Manifest JSON parse failed. Fail-closed Gate rejected the input."
+  } catch(e) {
+    decision = "reject";
+    reason = "Manifest JSON parse failed. Fail-closed Gate rejected the input.";
   }
 
-  const d=document.getElementById("decision")
-  d.textContent=decision.toUpperCase()
-  d.className="big "+decision
+  updateUI(decision, reason, score, verificationOk, signatureValid, hashMatch, actualHash, manifest);
+}
 
-  document.getElementById("reason").textContent=reason
-  document.getElementById("score").textContent=score.toFixed(2)
-  document.getElementById("verificationOk").textContent=String(verificationOk)
-  document.getElementById("signatureValid").textContent=String(signatureValid)
+function updateUI(decision, reason, score, verificationOk, signatureValid, hashMatch, actualHash, manifest){
+  const d = document.getElementById("decision");
+  d.textContent = decision.toUpperCase();
+  d.className = "big " + decision;
 
-  document.getElementById("integrity").textContent=verificationOk ? "1.00" : "0.00"
-  document.getElementById("origin").textContent=signatureValid ? "0.80" : "0.40"
-  document.getElementById("safety").textContent=manifest.safety_sanitized===true ? "1.00" : "0.60"
-  document.getElementById("audit").textContent=decision==="accept" ? "0.90" : decision==="pending" ? "0.60" : "0.20"
+  document.getElementById("reason").textContent = reason;
+  document.getElementById("score").textContent = score.toFixed(2);
+  document.getElementById("verificationOk").textContent = String(verificationOk);
+  document.getElementById("hashMatch").textContent = String(hashMatch);
+  document.getElementById("signatureValid").textContent = String(signatureValid);
 
-  document.getElementById("resultJson").textContent=JSON.stringify({
+  document.getElementById("integrity").textContent = hashMatch ? "1.00" : "0.00";
+  document.getElementById("origin").textContent = signatureValid ? "0.80" : "0.40";
+  document.getElementById("safety").textContent = manifest.safety_sanitized === true ? "1.00" : "0.60";
+  document.getElementById("audit").textContent = decision === "accept" ? "0.90" : decision === "pending" ? "0.60" : "0.20";
+
+  lastResult = {
+    time: new Date().toISOString(),
     decision,
     trust_score: score,
     verification_ok: verificationOk,
+    hash_match: hashMatch,
     signature_valid: signatureValid,
+    content_sha256_actual: actualHash,
+    content_sha256_manifest: manifest.content_sha256 || null,
     fail_closed: true,
     reason
-  },null,2)
+  };
+
+  document.getElementById("resultJson").textContent = JSON.stringify(lastResult, null, 2);
+
+  history.unshift(lastResult);
+  history = history.slice(0, 20);
+  localStorage.setItem("stage300_history", JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory(){
+  const tbody = document.getElementById("historyTable");
+  tbody.innerHTML = "";
+  history.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row.time}</td>
+      <td class="${row.decision}">${row.decision.toUpperCase()}</td>
+      <td>${row.trust_score.toFixed(2)}</td>
+      <td>${row.hash_match}</td>
+      <td>${row.signature_valid}</td>
+      <td class="hash">${row.content_sha256_actual.slice(0,12)}...</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function download(filename, text, type){
+  const blob = new Blob([text], {type});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportJSON(){
+  download("stage300_verification_history.json", JSON.stringify(history, null, 2), "application/json");
+}
+
+function exportCSV(){
+  const header = ["time","decision","trust_score","verification_ok","hash_match","signature_valid","content_sha256_actual","reason"];
+  const lines = [header.join(",")].concat(history.map(r => header.map(k => `"${String(r[k] ?? "").replaceAll('"','""')}"`).join(",")));
+  download("stage300_verification_history.csv", lines.join("\n"), "text/csv");
+}
+
+function clearHistory(){
+  history = [];
+  localStorage.removeItem("stage300_history");
+  renderHistory();
 }
 
 function loadAccept(){
-  document.getElementById("manifestInput").value=JSON.stringify({
-    subject:"Stage300 AI vulnerability verification demo",
-    evidence_type:"ai-vulnerability-url",
-    verification_url:"https://mokkunsuzuki-code.github.io/stage300/",
-    content_sha256:"7f22d4a1b1cdab217fdbde63791e4559140330962ff1a1bb8223adcb7e1eaed4",
-    signature_valid:true,
-    safety_sanitized:true
-  },null,2)
-  verifyManifest()
+  document.getElementById("contentInput").value = `{
+  "demo_type": "safe_ai_vulnerability_demo",
+  "target": "simulated-ai-system",
+  "risk_category": "unsafe-output",
+  "description": "This is a safe simulated AI vulnerability record. It does not contain working exploit instructions.",
+  "ai_output_summary": "The simulated AI produced an unsafe response pattern.",
+  "safety_note": "This record is sanitized for public demonstration."
+}`;
+  calculateContentHash().then(hash => {
+    document.getElementById("manifestInput").value = JSON.stringify({
+      subject: "Stage300 AI vulnerability verification demo",
+      evidence_type: "ai-vulnerability-url",
+      verification_url: "https://mokkunsuzuki-code.github.io/stage300/",
+      content_sha256: hash,
+      signature_valid: true,
+      safety_sanitized: true
+    }, null, 2);
+    verifyManifest();
+  });
 }
 
 function loadPending(){
-  document.getElementById("manifestInput").value=JSON.stringify({
-    subject:"Unsigned AI vulnerability demo",
-    evidence_type:"ai-vulnerability-url",
-    verification_url:"https://mokkunsuzuki-code.github.io/stage300/",
-    content_sha256:"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-    signature_valid:false,
-    safety_sanitized:true
-  },null,2)
-  verifyManifest()
+  document.getElementById("contentInput").value = "unsigned but structurally valid AI evidence";
+  calculateContentHash().then(hash => {
+    document.getElementById("manifestInput").value = JSON.stringify({
+      subject: "Unsigned AI vulnerability demo",
+      evidence_type: "ai-vulnerability-url",
+      verification_url: "https://mokkunsuzuki-code.github.io/stage300/",
+      content_sha256: hash,
+      signature_valid: false,
+      safety_sanitized: true
+    }, null, 2);
+    verifyManifest();
+  });
 }
 
 function loadReject(){
-  document.getElementById("manifestInput").value=JSON.stringify({
-    subject:"Broken AI vulnerability demo",
-    evidence_type:"ai-vulnerability-url",
-    verification_url:"",
-    content_sha256:"not-a-valid-sha256",
-    signature_valid:false,
-    safety_sanitized:true
-  },null,2)
-  verifyManifest()
+  document.getElementById("contentInput").value = "broken evidence";
+  document.getElementById("manifestInput").value = JSON.stringify({
+    subject: "Broken AI vulnerability demo",
+    evidence_type: "ai-vulnerability-url",
+    verification_url: "",
+    content_sha256: "not-a-valid-sha256",
+    signature_valid: false,
+    safety_sanitized: true
+  }, null, 2);
+  calculateContentHash().then(() => verifyManifest());
 }
 
-verifyManifest()
+renderHistory();
+calculateContentHash();
 </script>
 
 </body>
